@@ -29,6 +29,7 @@ jobs:
       # -projectName: The name of the project to serialize
       - name: Serialize Project
         run: |
+          rm -rf projects/k8s-helm/template
           mkdir -p projects/k8s-helm/template
           docker run -v $(pwd)/projects/k8s-helm/template:/tmp/octoexport --rm ghcr.io/octopussolutionsengineering/octoterra \
               -url https://demo.octopus.app \
