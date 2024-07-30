@@ -1,40 +1,40 @@
-variable "project_k8s_helm_template_name" {
+variable "project_k8s___helm_name" {
   type        = string
   nullable    = false
   sensitive   = false
-  description = "The name of the project exported from K8s Helm Template"
-  default     = "K8s Helm Template"
+  description = "The name of the project exported from K8s - Helm"
+  default     = "K8s - Helm"
 }
-variable "project_k8s_helm_template_description_prefix" {
+variable "project_k8s___helm_description_prefix" {
   type        = string
   nullable    = false
   sensitive   = false
-  description = "An optional prefix to add to the project description for the project K8s Helm Template"
+  description = "An optional prefix to add to the project description for the project K8s - Helm"
   default     = ""
 }
-variable "project_k8s_helm_template_description_suffix" {
+variable "project_k8s___helm_description_suffix" {
   type        = string
   nullable    = false
   sensitive   = false
-  description = "An optional suffix to add to the project description for the project K8s Helm Template"
+  description = "An optional suffix to add to the project description for the project K8s - Helm"
   default     = ""
 }
-variable "project_k8s_helm_template_description" {
+variable "project_k8s___helm_description" {
   type        = string
   nullable    = false
   sensitive   = false
-  description = "The description of the project exported from K8s Helm Template"
+  description = "The description of the project exported from K8s - Helm"
   default     = ""
 }
-variable "project_k8s_helm_template_tenanted" {
+variable "project_k8s___helm_tenanted" {
   type        = string
   nullable    = false
   sensitive   = false
   description = "The tenanted setting for the project Untenanted"
   default     = "Untenanted"
 }
-resource "octopusdeploy_project" "project_k8s_helm_template" {
-  name                                 = "${var.project_k8s_helm_template_name}"
+resource "octopusdeploy_project" "project_k8s___helm" {
+  name                                 = "${var.project_k8s___helm_name}"
   auto_create_release                  = false
   default_guided_failure_mode          = "EnvironmentDefault"
   default_to_skip_if_already_installed = false
@@ -42,9 +42,9 @@ resource "octopusdeploy_project" "project_k8s_helm_template" {
   is_disabled                          = false
   is_version_controlled                = false
   lifecycle_id                         = "${data.octopusdeploy_lifecycles.lifecycle_default_lifecycle.lifecycles[0].id}"
-  project_group_id                     = "${data.octopusdeploy_project_groups.project_group_project_templates.project_groups[0].id}"
+  project_group_id                     = "${data.octopusdeploy_project_groups.project_group_default_project_group.project_groups[0].id}"
   included_library_variable_sets       = []
-  tenanted_deployment_participation    = "${var.project_k8s_helm_template_tenanted}"
+  tenanted_deployment_participation    = "${var.project_k8s___helm_tenanted}"
 
   connectivity_policy {
     allow_deployments_to_no_targets = false
@@ -55,5 +55,5 @@ resource "octopusdeploy_project" "project_k8s_helm_template" {
   lifecycle {
     ignore_changes = ["connectivity_policy"]
   }
-  description = "${var.project_k8s_helm_template_description_prefix}${var.project_k8s_helm_template_description}${var.project_k8s_helm_template_description_suffix}"
+  description = "${var.project_k8s___helm_description_prefix}${var.project_k8s___helm_description}${var.project_k8s___helm_description_suffix}"
 }

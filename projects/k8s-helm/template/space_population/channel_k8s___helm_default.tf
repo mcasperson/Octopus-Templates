@@ -1,4 +1,4 @@
-data "octopusdeploy_channels" "channel_k8s_helm_template_default" {
+data "octopusdeploy_channels" "channel_k8s___helm_default" {
   ids          = []
   partial_name = "Default"
   skip         = 0
