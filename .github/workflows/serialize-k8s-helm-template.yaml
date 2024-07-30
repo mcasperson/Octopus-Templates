@@ -6,7 +6,7 @@ name: Serialize K8s Helm Template
   workflow_dispatch: {}
   #push:
   #  paths:
-  #    - '.octopus/templates/k8s-helm-template/*'
+  #    - '.octopus/K8s - Helm/*'
   #    - 'projects/**/*'
 jobs:
   build:
@@ -69,21 +69,21 @@ jobs:
             pushd "$dir" || exit
                         
             # Init the terraform backend, passing in the backend config values
-            terraform init -backend-config="bucket=octopus-primerica-tf-state" -backend-config="region=${{ secrets.AWS_REGION }}" -backend-config="key=K8sHelm"
+            terraform init -backend-config="chatmas-octoterra-pov" -backend-config="region=${{ secrets.AWS_REGION }}" -backend-config="key=K8sHelm"
             # Each project is managed in it's own workspace
             terraform workspace select -or-create "${project}"
             
             # Remove the deployment process, just in case
-            PROJECT_ID=$(curl -X GET "https://demo.octopus.app/api/Spaces-2165/projects" -H "X-Octopus-ApiKey: ${{ secrets.OCTOPUS_APIKEY }}" | jq -r ".Items[] | select(.Name==\"${project}\") | .Id")
+            PROJECT_ID=$(curl -X GET "https://demo.octopus.app/api/Spaces-2607/projects" -H "X-Octopus-ApiKey: ${{ secrets.OCTOPUS_APIKEY }}" | jq -r ".Items[] | select(.Name==\"${project}\") | .Id")
             echo "Found project $PROJECT_ID"
             
             if [[ $PROJECT_ID == Projects-* ]]
             then
-              DEPLOYMENT_PROCESS_ID=$(curl -X GET "https://demo.octopus.app/api/Spaces-2165/projects/$PROJECT_ID" -H "X-Octopus-ApiKey: ${{ secrets.OCTOPUS_APIKEY }}" | jq -r '.DeploymentProcessId')
+              DEPLOYMENT_PROCESS_ID=$(curl -X GET "https://demo.octopus.app/api/Spaces-2607/projects/$PROJECT_ID" -H "X-Octopus-ApiKey: ${{ secrets.OCTOPUS_APIKEY }}" | jq -r '.DeploymentProcessId')
               echo "Deployment process ID: $DEPLOYMENT_PROCESS_ID"
-              VERSION=$(curl -X GET "https://demo.octopus.app/api/Spaces-2165/deploymentprocesses/$DEPLOYMENT_PROCESS_ID" -H "X-Octopus-ApiKey: ${{ secrets.OCTOPUS_APIKEY }}" | jq -r ".Version")
+              VERSION=$(curl -X GET "https://demo.octopus.app/api/Spaces-2607/deploymentprocesses/$DEPLOYMENT_PROCESS_ID" -H "X-Octopus-ApiKey: ${{ secrets.OCTOPUS_APIKEY }}" | jq -r ".Version")
               echo "Deployment process version: $VERSION"
-              curl -X PUT "https://demo.octopus.app/api/Spaces-2165/projects/$PROJECT_ID/deploymentprocesses" -H "Content-Type: application/json" -H "X-Octopus-ApiKey: ${{ secrets.OCTOPUS_APIKEY }}" -d "{\"Version\": ${VERSION},\"Steps\": []}"
+              curl -X PUT "https://demo.octopus.app/api/Spaces-2607/projects/$PROJECT_ID/deploymentprocesses" -H "Content-Type: application/json" -H "X-Octopus-ApiKey: ${{ secrets.OCTOPUS_APIKEY }}" -d "{\"Version\": ${VERSION},\"Steps\": []}"
               echo "Cleared the deployment process $DEPLOYMENT_PROCESS_ID"
             fi
             
@@ -91,7 +91,7 @@ jobs:
             terraform apply -auto-approve \
             -var=octopus_server=https://demo.octopus.app \
             -var=octopus_apikey=${{ secrets.OCTOPUS_APIKEY }} \
-            -var=octopus_space_id=Spaces-2165 \
+            -var=octopus_space_id=Spaces-2607 \
             -var=project_name="${project}"
             popd || exit
 
@@ -112,7 +112,7 @@ jobs:
         
             pushd "$dir" || exit
             # Init the terraform backend, passing in the backend config values
-            terraform init -backend-config="bucket=octopus-primerica-tf-state" -backend-config="region=${{ secrets.AWS_REGION }}" -backend-config="key=K8sHelm"
+            terraform init -backend-config="bucket=chatmas-octoterra-pov" -backend-config="region=${{ secrets.AWS_REGION }}" -backend-config="key=K8sHelm"
             # Each project is managed in it's own workspace
             terraform workspace select -or-create "${project}"
         
@@ -120,7 +120,7 @@ jobs:
             terraform destroy -auto-approve \
             -var=octopus_server=https://demo.octopus.app \
             -var=octopus_apikey=${{ secrets.OCTOPUS_APIKEY }} \
-            -var=octopus_space_id=Spaces-2165
+            -var=octopus_space_id=Spaces-2607
             popd || exit
 
           done
