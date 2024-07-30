@@ -1,0 +1,50 @@
+step "deploy-a-helm-chart" {
+    name = "Deploy a Helm Chart"
+    properties = {
+        Octopus.Action.TargetRoles = "octopetshop-web"
+    }
+
+    action {
+        action_type = "Octopus.HelmChartUpgrade"
+        properties = {
+            Octopus.Action.Helm.ClientVersion = "V3"
+            Octopus.Action.Helm.ResetValues = "True"
+            Octopus.Action.Package.DownloadOnTentacle = "False"
+            Octopus.Action.Package.FeedId = "octopus-server-built-in"
+            Octopus.Action.Package.PackageId = "petclinic-chart"
+        }
+        worker_pool_variable = ""
+
+        packages {
+            acquisition_location = "Server"
+            feed = "octopus-server-built-in"
+            package_id = "petclinic-chart"
+            properties = {
+                SelectionMode = "immediate"
+            }
+        }
+
+        packages "Worker Image" {
+            acquisition_location = "NotAcquired"
+            feed = "ghcr"
+            package_id = "#{project.packageName}"
+            properties = {
+                Extract = "False"
+                Purpose = "DockerImageReference"
+                SelectionMode = "immediate"
+            }
+        }
+    }
+}
+
+step "jira-add-comment-to-task-api-token" {
+    name = "Jira - Add comment to task - API Token"
+
+    action {
+        properties = {
+            Octopus.Action.Template.Id = "ActionTemplates-3682"
+            Octopus.Action.Template.Version = "2"
+        }
+        worker_pool = "hosted-windows"
+    }
+}
