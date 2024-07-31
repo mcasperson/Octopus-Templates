@@ -20,6 +20,9 @@ module "template_project" {
   source = "../../template/space_population"
   project_k8s___helm_name = var.project_name
   k8s___helm_project_packagename_1 = "octopusdeploylabs/octotesting"
+  octopus_server = var.octopus_server
+  octopus_apikey = var.octopus_apikey
+  octopus_space_id = var.octopus_space_id
 }
 
 variable "octopus_server" {
