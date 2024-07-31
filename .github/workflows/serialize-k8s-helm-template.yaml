@@ -39,7 +39,6 @@ jobs:
               -lookupProjectDependencies \
               -ignoreCacManagedValues=false \
               -excludeCaCProjectSettings=true \
-              -excludeProvider \
               -terraformBackend s3 \
               -dest /tmp/octoexport
         shell: bash
