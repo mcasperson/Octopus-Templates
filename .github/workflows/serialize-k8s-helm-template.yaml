@@ -27,13 +27,18 @@ jobs:
       # -space: The space ID
       # -apiKey: The API key to use
       # -projectName: The name of the project to serialize
+      #Download the executable
+      #Run the executable with the same arguments
+      
       - name: Serialize Project
         run: |
+          
           curl -L -o octoterra "https://github.com/OctopusSolutionsEngineering/OctopusTerraformExport/releases/latest/download/octoterra_linux_amd64"
           chmod +x octoterra
           
           rm -rf projects/k8s-helm/template
           mkdir -p projects/k8s-helm/template
+          
           ./octoterra \
               -url https://demo.octopus.app \
               -space Spaces-2607 \
@@ -44,6 +49,7 @@ jobs:
               -excludeCaCProjectSettings=true \
               -terraformBackend s3 \
               -dest projects/k8s-helm/template
+              
         shell: bash
       - uses: stefanzweifel/git-auto-commit-action@v5
       # The credentials here are required for the Terraform state, which is managed in an S3 bucket. If using another
