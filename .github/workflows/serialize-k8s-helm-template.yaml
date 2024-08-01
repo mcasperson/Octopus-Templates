@@ -29,7 +29,7 @@ jobs:
       # -projectName: The name of the project to serialize
       - name: Serialize Project
         run: |
-          curl -o octoterra "https://github.com/OctopusSolutionsEngineering/OctopusTerraformExport/releases/latest/download/octoterra_linux_amd64"
+          curl -L -o octoterra "https://github.com/OctopusSolutionsEngineering/OctopusTerraformExport/releases/latest/download/octoterra_linux_amd64"
           chmod +x octoterra
           
           rm -rf projects/k8s-helm/template
