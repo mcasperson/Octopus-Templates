@@ -44,7 +44,7 @@ step "jira-add-comment-to-task-api-token" {
     action {
         properties = {
             Octopus.Action.Template.Id = "ActionTemplates-3682"
-            Octopus.Action.Template.Version = "2"
+            Octopus.Action.Template.Version = "3"
         }
         worker_pool = "hosted-windows"
     }
