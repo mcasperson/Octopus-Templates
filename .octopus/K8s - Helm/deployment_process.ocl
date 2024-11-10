@@ -13,10 +13,15 @@ step "deploy-microservice" {
             Octopus.Action.Package.DownloadOnTentacle = "False"
             Octopus.Action.Package.FeedId = "learn-devops"
             Octopus.Action.Package.PackageId = "helloapp"
-            Octopus.Action.RunOnServer = "false"
             Octopus.Action.Script.ScriptSource = "Package"
+            OctopusUseBundledTooling = "False"
         }
-        worker_pool_variable = ""
+        worker_pool = "hosted-ubuntu"
+
+        container {
+            feed = "dockerhub"
+            image = "octopusdeploy/worker-tools:6.3.0-ubuntu.22.04"
+        }
 
         packages {
             acquisition_location = "Server"
