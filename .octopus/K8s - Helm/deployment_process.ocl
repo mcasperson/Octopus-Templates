@@ -8,7 +8,17 @@ step "create-namespace" {
         action_type = "Octopus.KubernetesRunScript"
         properties = {
             Octopus.Action.RunOnServer = "true"
-            Octopus.Action.Script.ScriptBody = "kubectl create ns mizuho-#{Octopus.Environment.Name | ToLower}"
+            Octopus.Action.Script.ScriptBody = <<-EOT
+                NAMESPACE=mizuho-#{Octopus.Environment.Name | ToLower}
+                
+                if kubectl get namespace "$NAMESPACE" > /dev/null 2>&1; then
+                  echo "Namespace '$NAMESPACE' exists."
+                else
+                  kubectl create ns $NAMESPACE
+                fi
+                
+                
+                EOT
             Octopus.Action.Script.ScriptSource = "Inline"
             Octopus.Action.Script.Syntax = "Bash"
             OctopusUseBundledTooling = "False"
