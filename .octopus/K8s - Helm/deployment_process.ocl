@@ -30,6 +30,7 @@ step "deploy-microservice" {
 
     action {
         action_type = "Octopus.HelmChartUpgrade"
+        notes = "Deploys the microservice Helm chart."
         properties = {
             Octopus.Action.Helm.ClientVersion = "V3"
             Octopus.Action.Helm.Namespace = "mizuho-#{Octopus.Environment.Name | ToLower}"
