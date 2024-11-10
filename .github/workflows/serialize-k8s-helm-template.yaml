@@ -41,7 +41,7 @@ jobs:
           
           ./octoterra \
               -url ${{ secrets.OCTOPUS_URL }} \
-              -space ${{ secrets.OCTOPUS_SPACID }} \
+              -space ${{ secrets.OCTOPUS_SPACEID }} \
               -apiKey ${{ secrets.OCTOPUS_APIKEY }} \
               -projectName "K8s - Helm" \
               -lookupProjectDependencies \
