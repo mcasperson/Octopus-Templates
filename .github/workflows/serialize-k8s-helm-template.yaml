@@ -94,17 +94,17 @@ jobs:
             terraform workspace select -or-create "${project}"
             
             # Remove the deployment process, just in case
-            PROJECT_ID=$(curl -X GET "${{ secrets.OCTOPUS_URL }}/api/${{ secrets.OCTOPUS_SPACEID }}/projects" -H "X-Octopus-ApiKey: ${{ secrets.OCTOPUS_APIKEY }}" | jq -r ".Items[] | select(.Name==\"${project}\") | .Id")
+            PROJECT_ID=$(curl --silent -X GET "${{ secrets.OCTOPUS_URL }}/api/${{ secrets.OCTOPUS_SPACEID }}/projects" -H "X-Octopus-ApiKey: ${{ secrets.OCTOPUS_APIKEY }}" | jq -r ".Items[] | select(.Name==\"${project}\") | .Id")
             echo "Found project $PROJECT_ID"
             
             if [[ $PROJECT_ID == Projects-* ]]
             then
               echo "Cleaning up the deployment process for: $PROJECT_ID"
-              DEPLOYMENT_PROCESS_ID=$(curl -X GET "${{ secrets.OCTOPUS_URL }}/api/${{ secrets.OCTOPUS_SPACEID }}/projects/$PROJECT_ID" -H "X-Octopus-ApiKey: ${{ secrets.OCTOPUS_APIKEY }}" | jq -r '.DeploymentProcessId')
+              DEPLOYMENT_PROCESS_ID=$(curl --silent -X GET "${{ secrets.OCTOPUS_URL }}/api/${{ secrets.OCTOPUS_SPACEID }}/projects/$PROJECT_ID" -H "X-Octopus-ApiKey: ${{ secrets.OCTOPUS_APIKEY }}" | jq -r '.DeploymentProcessId')
               echo "Deployment process ID: $DEPLOYMENT_PROCESS_ID"
-              VERSION=$(curl -X GET "${{ secrets.OCTOPUS_URL }}/api/${{ secrets.OCTOPUS_SPACEID }}/deploymentprocesses/$DEPLOYMENT_PROCESS_ID" -H "X-Octopus-ApiKey: ${{ secrets.OCTOPUS_APIKEY }}" | jq -r ".Version")
+              VERSION=$(curl --silent -X GET "${{ secrets.OCTOPUS_URL }}/api/${{ secrets.OCTOPUS_SPACEID }}/deploymentprocesses/$DEPLOYMENT_PROCESS_ID" -H "X-Octopus-ApiKey: ${{ secrets.OCTOPUS_APIKEY }}" | jq -r ".Version")
               echo "Deployment process version: $VERSION"
-              curl -X PUT "${{ secrets.OCTOPUS_URL }}/api/${{ secrets.OCTOPUS_SPACEID }}/projects/$PROJECT_ID/deploymentprocesses" -H "Content-Type: application/json" -H "X-Octopus-ApiKey: ${{ secrets.OCTOPUS_APIKEY }}" -d "{\"Version\": ${VERSION},\"Steps\": []}"
+              curl --silent -X PUT "${{ secrets.OCTOPUS_URL }}/api/${{ secrets.OCTOPUS_SPACEID }}/projects/$PROJECT_ID/deploymentprocesses" -H "Content-Type: application/json" -H "X-Octopus-ApiKey: ${{ secrets.OCTOPUS_APIKEY }}" -d "{\"Version\": ${VERSION},\"Steps\": []}"
               echo "Cleared the deployment process $DEPLOYMENT_PROCESS_ID"
             fi
 
