@@ -4,10 +4,10 @@ permissions:
 name: Serialize K8s Helm Template
 'on':
   workflow_dispatch: {}
-  #push:
-  #  paths:
-  #    - '.octopus/K8s - Helm/*'
-  #    - 'projects/**/*'
+  push:
+    paths:
+      - '.octopus/K8s - Helm/*'
+      - 'projects/**/*'
 jobs:
   build:
     runs-on: ubuntu-latest
