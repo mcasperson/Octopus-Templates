@@ -152,7 +152,7 @@ jobs:
         
             # Destroy the terraform configuration, passing in the octopus details
             terraform destroy -auto-approve \
-            -var=octopus_server${{ secrets.OCTOPUS_URL }} \
+            -var=octopus_server=${{ secrets.OCTOPUS_URL }} \
             -var=octopus_apikey=${{ secrets.OCTOPUS_APIKEY }} \
             -var=octopus_space_id=${{ secrets.OCTOPUS_SPACEID }}
             popd || exit
