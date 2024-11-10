@@ -48,7 +48,7 @@ step "deploy-microservice" {
             Octopus.Action.Helm.ResetValues = "True"
             Octopus.Action.Package.DownloadOnTentacle = "False"
             Octopus.Action.Package.FeedId = "learn-devops"
-            Octopus.Action.Package.PackageId = "helloapp"
+            Octopus.Action.Package.PackageId = "echo-server"
             Octopus.Action.Script.ScriptSource = "Package"
             OctopusUseBundledTooling = "False"
         }
@@ -62,7 +62,7 @@ step "deploy-microservice" {
         packages {
             acquisition_location = "Server"
             feed = "learn-devops"
-            package_id = "helloapp"
+            package_id = "echo-server"
             properties = {
                 SelectionMode = "immediate"
             }
