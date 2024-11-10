@@ -34,6 +34,7 @@ step "deploy-microservice" {
         properties = {
             Octopus.Action.Helm.ClientVersion = "V3"
             Octopus.Action.Helm.Namespace = "mizuho-#{Octopus.Environment.Name | ToLower}"
+            Octopus.Action.Helm.ReleaseName = "helloapp-#{Octopus.Environment.Name | ToLower}"
             Octopus.Action.Helm.ResetValues = "True"
             Octopus.Action.Package.DownloadOnTentacle = "False"
             Octopus.Action.Package.FeedId = "learn-devops"
