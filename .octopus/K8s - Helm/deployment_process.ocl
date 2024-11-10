@@ -1,3 +1,20 @@
+step "create-namespace" {
+    name = "Create Namespace"
+    properties = {
+        Octopus.Action.TargetRoles = "eks"
+    }
+
+    action {
+        action_type = "Octopus.KubernetesRunScript"
+        properties = {
+            Octopus.Action.Script.ScriptBody = "kubectl create ns mizuho-#{Octopus.Environment.Name | ToLower}"
+            Octopus.Action.Script.ScriptSource = "Inline"
+            Octopus.Action.Script.Syntax = "Bash"
+        }
+        worker_pool_variable = ""
+    }
+}
+
 step "deploy-microservice" {
     name = "Deploy Microservice"
     properties = {
