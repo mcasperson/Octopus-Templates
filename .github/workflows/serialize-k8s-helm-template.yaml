@@ -5,6 +5,8 @@ name: Serialize K8s Helm Template
 'on':
   workflow_dispatch: {}
   push:
+    branches:
+      - main
     paths:
       - '.octopus/K8s - Helm/*'
       - 'projects/**/*'
