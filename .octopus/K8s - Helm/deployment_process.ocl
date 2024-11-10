@@ -1,0 +1,29 @@
+step "deploy-microservice" {
+    name = "Deploy Microservice"
+    properties = {
+        Octopus.Action.TargetRoles = "eks"
+    }
+
+    action {
+        action_type = "Octopus.HelmChartUpgrade"
+        properties = {
+            Octopus.Action.Helm.ClientVersion = "V3"
+            Octopus.Action.Helm.Namespace = "mizuho"
+            Octopus.Action.Helm.ResetValues = "True"
+            Octopus.Action.Package.DownloadOnTentacle = "False"
+            Octopus.Action.Package.FeedId = "octopus-server-built-in"
+            Octopus.Action.Package.PackageId = "test"
+            Octopus.Action.Script.ScriptSource = "Package"
+        }
+        worker_pool_variable = ""
+
+        packages {
+            acquisition_location = "Server"
+            feed = "octopus-server-built-in"
+            package_id = "test"
+            properties = {
+                SelectionMode = "immediate"
+            }
+        }
+    }
+}
