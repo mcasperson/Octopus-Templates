@@ -64,7 +64,14 @@ jobs:
       # to be the name of the child project. This script then calls Terraform to apply any new changes.
       - name: Create / Update projects
         run: |
+          # Make sure the parent directory exists
           if [ ! -d "$(pwd)/projects/k8s-helm/projects" ]; then
+            echo "No projects to process"
+            exit 0
+          fi
+          
+          # Make sure there are projects to process
+          if [ $(find "$(pwd)/projects/k8s-helm/projects" -type d | wc -l) == "1" ]; then
             echo "No projects to process"
             exit 0
           fi
@@ -117,6 +124,11 @@ jobs:
       - name: Destroy projects
         run: |
           if [ ! -d "$(pwd)/projects/k8s-helm/cleanup" ]; then
+            echo "No cleanup projects to process"
+            exit 0
+          fi
+          
+          if [ $(find "$(pwd)/projects/k8s-helm/cleanup" -type d | wc -l) == "1" ]; then
             echo "No cleanup projects to process"
             exit 0
           fi
