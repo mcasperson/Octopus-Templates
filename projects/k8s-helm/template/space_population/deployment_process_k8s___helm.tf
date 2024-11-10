@@ -61,13 +61,13 @@ resource "octopusdeploy_deployment_process" "deployment_process_k8s___helm" {
       is_required                        = false
       worker_pool_id                     = "${data.octopusdeploy_worker_pools.workerpool_hosted_ubuntu.worker_pools[0].id}"
       properties                         = {
-        "Octopus.Action.Script.ScriptSource" = "Package"
-        "Octopus.Action.Helm.ResetValues" = "True"
-        "OctopusUseBundledTooling" = "False"
-        "Octopus.Action.Helm.Namespace" = "mizuho-#{Octopus.Environment.Name | ToLower}"
-        "Octopus.Action.Package.DownloadOnTentacle" = "False"
         "Octopus.Action.Helm.ClientVersion" = "V3"
+        "Octopus.Action.Package.DownloadOnTentacle" = "False"
+        "OctopusUseBundledTooling" = "False"
+        "Octopus.Action.Helm.ResetValues" = "True"
+        "Octopus.Action.Helm.Namespace" = "mizuho-#{Octopus.Environment.Name | ToLower}"
         "Octopus.Action.RunOnServer" = "true"
+        "Octopus.Action.Script.ScriptSource" = "Package"
       }
 
       container {
