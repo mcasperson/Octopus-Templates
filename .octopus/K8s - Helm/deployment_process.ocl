@@ -1,3 +1,15 @@
+step "manual-intervention-required" {
+    name = "Manual Intervention Required"
+
+    action {
+        action_type = "Octopus.Manual"
+        properties = {
+            Octopus.Action.Manual.BlockConcurrentDeployments = "False"
+            Octopus.Action.Manual.Instructions = "Do you wish to proceed"
+        }
+    }
+}
+
 step "create-namespace" {
     name = "Create Namespace"
     properties = {
@@ -6,9 +18,20 @@ step "create-namespace" {
 
     action {
         action_type = "Octopus.KubernetesRunScript"
+        notes = "Creates the namespace if it does not exist."
         properties = {
             Octopus.Action.RunOnServer = "true"
-            Octopus.Action.Script.ScriptBody = "kubectl create ns mizuho-#{Octopus.Environment.Name | ToLower}"
+            Octopus.Action.Script.ScriptBody = <<-EOT
+                NAMESPACE=mizuho-#{Octopus.Environment.Name | ToLower}
+                
+                if kubectl get namespace "$NAMESPACE" > /dev/null 2>&1; then
+                  echo "Namespace '$NAMESPACE' exists."
+                else
+                  kubectl create ns $NAMESPACE
+                fi
+                
+                
+                EOT
             Octopus.Action.Script.ScriptSource = "Inline"
             Octopus.Action.Script.Syntax = "Bash"
             OctopusUseBundledTooling = "False"
@@ -34,10 +57,11 @@ step "deploy-microservice" {
         properties = {
             Octopus.Action.Helm.ClientVersion = "V3"
             Octopus.Action.Helm.Namespace = "mizuho-#{Octopus.Environment.Name | ToLower}"
+            Octopus.Action.Helm.ReleaseName = "deploymicroservice-#{Octopus.Environment.Name | ToLower}"
             Octopus.Action.Helm.ResetValues = "True"
             Octopus.Action.Package.DownloadOnTentacle = "False"
             Octopus.Action.Package.FeedId = "learn-devops"
-            Octopus.Action.Package.PackageId = "helloapp"
+            Octopus.Action.Package.PackageId = "echo-server"
             Octopus.Action.Script.ScriptSource = "Package"
             OctopusUseBundledTooling = "False"
         }
@@ -51,7 +75,7 @@ step "deploy-microservice" {
         packages {
             acquisition_location = "Server"
             feed = "learn-devops"
-            package_id = "helloapp"
+            package_id = "echo-server"
             properties = {
                 SelectionMode = "immediate"
             }
