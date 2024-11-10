@@ -59,7 +59,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
+          aws-region: us-west-1
       # This is where we loop over all the subdirectories under /projects/k8s-helm/projects, where each project is assumed
       # to be the name of the child project. This script then calls Terraform to apply any new changes.
       - name: Create / Update projects
