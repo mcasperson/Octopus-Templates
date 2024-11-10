@@ -54,6 +54,7 @@ resource "octopusdeploy_deployment_process" "deployment_process_k8s___helm" {
     action {
       action_type                        = "Octopus.HelmChartUpgrade"
       name                               = "Deploy Microservice"
+      notes                              = "Deploys the microservice Helm chart."
       condition                          = "Success"
       run_on_server                      = true
       is_disabled                        = false
@@ -62,12 +63,12 @@ resource "octopusdeploy_deployment_process" "deployment_process_k8s___helm" {
       worker_pool_id                     = "${data.octopusdeploy_worker_pools.workerpool_hosted_ubuntu.worker_pools[0].id}"
       properties                         = {
         "OctopusUseBundledTooling" = "False"
-        "Octopus.Action.Package.DownloadOnTentacle" = "False"
-        "Octopus.Action.Helm.ResetValues" = "True"
-        "Octopus.Action.RunOnServer" = "true"
-        "Octopus.Action.Helm.Namespace" = "mizuho-#{Octopus.Environment.Name | ToLower}"
-        "Octopus.Action.Helm.ClientVersion" = "V3"
         "Octopus.Action.Script.ScriptSource" = "Package"
+        "Octopus.Action.Helm.ResetValues" = "True"
+        "Octopus.Action.Helm.Namespace" = "mizuho-#{Octopus.Environment.Name | ToLower}"
+        "Octopus.Action.RunOnServer" = "true"
+        "Octopus.Action.Helm.ClientVersion" = "V3"
+        "Octopus.Action.Package.DownloadOnTentacle" = "False"
       }
 
       container {
