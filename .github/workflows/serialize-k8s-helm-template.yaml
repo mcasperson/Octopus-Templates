@@ -64,6 +64,11 @@ jobs:
       # to be the name of the child project. This script then calls Terraform to apply any new changes.
       - name: Create / Update projects
         run: |
+          if [ ! -d "$(pwd)/projects/k8s-helm/projects" ]; then
+            echo "No projects to process"
+            exit 0
+          fi
+          
           for dir in $(pwd)/projects/k8s-helm/projects/*/     # list directories in the form "/tmp/dirname/"
           do
             # Remove the trailing slash
@@ -111,6 +116,11 @@ jobs:
       # to be the name of the child project. This script then calls Terraform to destroy any projects that need to be removed.
       - name: Destroy projects
         run: |
+          if [ ! -d "$(pwd)/projects/k8s-helm/cleanup" ]; then
+            echo "No cleanup projects to process"
+            exit 0
+          fi
+          
           for dir in $(pwd)/projects/k8s-helm/cleanup/*/     # list directories in the form "/tmp/dirname/"
           do
             # Remove the trailing slash
