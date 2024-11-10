@@ -1,3 +1,27 @@
+step "create-namespace" {
+    name = "Create Namespace"
+    properties = {
+        Octopus.Action.TargetRoles = "eks"
+    }
+
+    action {
+        action_type = "Octopus.KubernetesRunScript"
+        properties = {
+            Octopus.Action.RunOnServer = "true"
+            Octopus.Action.Script.ScriptBody = "kubectl create ns mizuho-#{Octopus.Environment.Name | ToLower}"
+            Octopus.Action.Script.ScriptSource = "Inline"
+            Octopus.Action.Script.Syntax = "Bash"
+            OctopusUseBundledTooling = "False"
+        }
+        worker_pool_variable = ""
+
+        container {
+            feed = "dockerhub"
+            image = "octopusdeploy/worker-tools:6.3.0-ubuntu.22.04"
+        }
+    }
+}
+
 step "deploy-microservice" {
     name = "Deploy Microservice"
     properties = {
@@ -8,19 +32,25 @@ step "deploy-microservice" {
         action_type = "Octopus.HelmChartUpgrade"
         properties = {
             Octopus.Action.Helm.ClientVersion = "V3"
-            Octopus.Action.Helm.Namespace = "mizuho"
+            Octopus.Action.Helm.Namespace = "mizuho-#{Octopus.Environment.Name | ToLower}"
             Octopus.Action.Helm.ResetValues = "True"
             Octopus.Action.Package.DownloadOnTentacle = "False"
-            Octopus.Action.Package.FeedId = "octopus-server-built-in"
-            Octopus.Action.Package.PackageId = "test"
+            Octopus.Action.Package.FeedId = "learn-devops"
+            Octopus.Action.Package.PackageId = "helloapp"
             Octopus.Action.Script.ScriptSource = "Package"
+            OctopusUseBundledTooling = "False"
         }
-        worker_pool_variable = ""
+        worker_pool = "hosted-ubuntu"
+
+        container {
+            feed = "dockerhub"
+            image = "octopusdeploy/worker-tools:6.3.0-ubuntu.22.04"
+        }
 
         packages {
             acquisition_location = "Server"
-            feed = "octopus-server-built-in"
-            package_id = "test"
+            feed = "learn-devops"
+            package_id = "helloapp"
             properties = {
                 SelectionMode = "immediate"
             }
