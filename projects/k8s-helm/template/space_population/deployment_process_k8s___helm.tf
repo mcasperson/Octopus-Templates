@@ -17,6 +17,7 @@ resource "octopusdeploy_deployment_process" "deployment_process_k8s___helm" {
     action {
       action_type                        = "Octopus.Manual"
       name                               = "Manual Intervention Required"
+      notes                              = "Require approval for a deployment"
       condition                          = "Success"
       run_on_server                      = false
       is_disabled                        = false
@@ -54,11 +55,11 @@ resource "octopusdeploy_deployment_process" "deployment_process_k8s___helm" {
       can_be_used_for_project_versioning = true
       is_required                        = false
       properties                         = {
+        "Octopus.Action.RunOnServer" = "true"
         "Octopus.Action.Script.ScriptBody" = "NAMESPACE=mizuho-#{Octopus.Environment.Name | ToLower}\n\nif kubectl get namespace \"$NAMESPACE\" \u003e /dev/null 2\u003e\u00261; then\n  echo \"Namespace '$NAMESPACE' exists.\"\nelse\n  kubectl create ns $NAMESPACE\nfi\n\n"
         "Octopus.Action.Script.ScriptSource" = "Inline"
         "Octopus.Action.Script.Syntax" = "Bash"
         "OctopusUseBundledTooling" = "False"
-        "Octopus.Action.RunOnServer" = "true"
       }
 
       container {
@@ -93,14 +94,14 @@ resource "octopusdeploy_deployment_process" "deployment_process_k8s___helm" {
       is_required                        = false
       worker_pool_id                     = "${data.octopusdeploy_worker_pools.workerpool_hosted_ubuntu.worker_pools[0].id}"
       properties                         = {
-        "OctopusUseBundledTooling" = "False"
-        "Octopus.Action.RunOnServer" = "true"
-        "Octopus.Action.Script.ScriptSource" = "Package"
         "Octopus.Action.Helm.Namespace" = "mizuho-#{Octopus.Environment.Name | ToLower}"
-        "Octopus.Action.Helm.ReleaseName" = "deploymicroservice-#{Octopus.Environment.Name | ToLower}"
-        "Octopus.Action.Package.DownloadOnTentacle" = "False"
+        "OctopusUseBundledTooling" = "False"
         "Octopus.Action.Helm.ResetValues" = "True"
+        "Octopus.Action.Package.DownloadOnTentacle" = "False"
         "Octopus.Action.Helm.ClientVersion" = "V3"
+        "Octopus.Action.Script.ScriptSource" = "Package"
+        "Octopus.Action.Helm.ReleaseName" = "deploymicroservice-#{Octopus.Environment.Name | ToLower}"
+        "Octopus.Action.RunOnServer" = "true"
       }
 
       container {
