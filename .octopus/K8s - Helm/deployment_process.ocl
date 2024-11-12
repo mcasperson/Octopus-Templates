@@ -3,9 +3,11 @@ step "manual-intervention-required" {
 
     action {
         action_type = "Octopus.Manual"
+        notes = "Require approval for a deployment"
         properties = {
             Octopus.Action.Manual.BlockConcurrentDeployments = "False"
             Octopus.Action.Manual.Instructions = "Do you wish to proceed"
+            Octopus.Action.RunOnServer = "false"
         }
     }
 }
