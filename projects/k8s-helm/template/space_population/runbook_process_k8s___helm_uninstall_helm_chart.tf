@@ -16,12 +16,12 @@ resource "octopusdeploy_runbook_process" "runbook_process_k8s___helm_uninstall_h
       can_be_used_for_project_versioning = true
       is_required                        = false
       properties                         = {
+        "OctopusUseBundledTooling" = "False"
         "Octopus.Action.Script.ScriptSource" = "Inline"
         "Octopus.Action.Script.Syntax" = "Bash"
         "Octopus.Action.Script.ScriptBody" = "helm uninstall deploymicroservice-#{Octopus.Environment.Name | ToLower}"
         "Octopus.Action.KubernetesContainers.Namespace" = "mizuho-#{Octopus.Environment.Name | ToLower}"
         "Octopus.Action.RunOnServer" = "true"
-        "OctopusUseBundledTooling" = "False"
       }
 
       container {

@@ -24,7 +24,7 @@ variable "project_k8s___helm_description" {
   nullable    = false
   sensitive   = false
   description = "The description of the project exported from K8s - Helm"
-  default     = ""
+  default     = "[GitHub Repo](https://github.com/mcasperson/Octopus-Templates)"
 }
 variable "project_k8s___helm_tenanted" {
   type        = string
